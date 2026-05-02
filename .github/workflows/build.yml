@@ -11,13 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Unzip project
-        run: |
-          if [ -f MisBolsillos_flutter.zip ]; then
-            unzip MisBolsillos_flutter.zip
-            cp -r bolsillos_app/. .
-          fi
-
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -27,8 +20,13 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
+          flutter-version: '3.24.0'
           channel: 'stable'
+
+      - name: Unzip and move to root
+        run: |
+          unzip MisBolsillos_v2.zip -d extracted
+          cp -r extracted/bolsillos_app/. .
 
       - name: Get dependencies
         run: flutter pub get
@@ -41,3 +39,4 @@ jobs:
         with:
           name: MisBolsillos-APK
           path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 7
